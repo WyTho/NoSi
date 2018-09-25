@@ -1,0 +1,32 @@
+{
+    "Database": [
+        {
+            "hardwareID": "349820398420394802342",
+            "date": "10:30 31-10-2017",
+            "interaction": "light",
+            "action": "Turn on",
+            "state": "1"
+        },
+        {
+            "hardwareID": "349820398420394802342",
+            "date": "10:30 31-10-2017",
+            "interaction": "light",
+            "action": "Turn on",
+            "state": "1"
+        },
+        {
+            "hardwareID": "349820398420394802342",
+            "date": "10:30 31-10-2017",
+            "interaction": "light",
+            "action": "Turn on",
+            "state": "1"
+        },
+        {
+            "hardwareID": "349820398420394802342",
+            "date": "10:30 31-10-2017",
+            "interaction": "light",
+            "action": "Turn on",
+            "state": "1"
+        }
+    ]
+}

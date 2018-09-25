@@ -1,0 +1,82 @@
+{
+    "template" : [
+        { 
+            "id" : "6c0de526-f7d5-4e99-a5dd-68238472111f", 
+            "name" : "Lampje", 
+            "interactions" : [
+                {
+                    "name" : "light", 
+                    "actions" : [
+                        {
+                            "description" : "Turn off", 
+                            "code" : "0"
+                        }, 
+                        {
+                            "description" : "Turn on", 
+                            "code" : "1"
+                        }
+                    ]
+                }
+            ], 
+            "state" : [
+                {
+                    "name" : "light", 
+                    "state" : "0"
+                }
+            ], 
+            "flasi_id" : "0"
+        },
+        { 
+            "id" : "75aff54d-500c-4d30-885e-3a747dec6749", 
+            "name" : "Voordeur", 
+            "interactions" : [
+                {
+                    "name" : "deur", 
+                    "actions" : [
+                        {
+                            "description" : "Close", 
+                            "code" : "0"
+                        }, 
+                        {
+                            "description" : "Open", 
+                            "code" : "1"
+                        }
+                    ]
+                }
+            ], 
+            "state" : [
+                {
+                    "name" : "deur", 
+                    "state" : "0"
+                }
+            ], 
+            "flasi_id" : "1"
+        },
+        { 
+            "name" : "Wekker", 
+            "interactions" : [
+                {
+                    "name" : "alarm", 
+                    "actions" : [
+                        {
+                            "description" : "On", 
+                            "code" : "0"
+                        }, 
+                        {
+                            "description" : "off", 
+                            "code" : "1"
+                        }
+                    ]
+                }
+            ], 
+            "state" : [
+                {
+                    "name" : "alarm", 
+                    "state" : "0"
+                }
+            ], 
+            "id" : "b1b88032-df1f-4cba-8436-9a3e42ca4c12", 
+            "flasi_id" : "2"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "database": {
+        "url": "mongodb://deploy:123abc@ds113003.mlab.com",
+        "port": "13003",
+        "scheme": "selficientnosi"
+    },
+    "homelink": {
+        "url": "blabla"
+    },
+    "FlaSi": {
+        "urlbase": "http://192.168.1.100:8080"
+    },
+    "runmode": "debug",
+    "UseHttps": "false",
+    "HttpCertificateFileName": "turnipinator" 
+}
