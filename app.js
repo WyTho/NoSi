@@ -1,4 +1,7 @@
-//hallo dit is een app.js
+
+// AANGEPAST: mongo credentials @ config.json
+// AANGEPAST: APIKEYS.json toegevoegd (word niet gebruikt volgensmij)
+
 var fs = require('fs');
 var https = require('https');
 const Config = require('./config.json');
@@ -29,5 +32,6 @@ const options = {
 //    console.log(`listening on port ${port}! and using HTTPS`)
 }
 else {*/
+// AANGEPAST: port var = gefixt
 app.listen(port, ()=> console.log(`listening on port ${port}! and using HTTP`));
 //}

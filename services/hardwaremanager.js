@@ -9,6 +9,8 @@ const flasiservice = require("./flasiservice.js");
 function hardwaremanager() {
 
     //Checks if apikey is valid
+
+    // AANGEPAST: deze string was "area" maar moest "hardware" zijn want zo heet die in mongoDB
     databasename = "hardware";
     var hardwarenames = ["Staande_lamp_1",
         "slide-door",
@@ -163,6 +165,7 @@ function hardwaremanager() {
 
         getState(req, res) {
             //TODO: Add security checks
+            // AANGEPAST: ietz in deze functie
             if (!req.params.name) {
                 return res.send("No Data Found");
             }
@@ -174,6 +177,7 @@ function hardwaremanager() {
             }).catch(err => res.send(err));
         },
         getBase(req, res) {
+            // AANGEPAST: ietz in deze functie
             if (!req.params.name) {
                 return res.send("No Data Found");
             }
