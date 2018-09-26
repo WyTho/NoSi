@@ -30,6 +30,8 @@ router.get('/', function (req, res) {
 });
 
 router.post('/updatestate', upload.array(), function (req, res) {
+    console.log('-', req, res);
+    console.log('UPDATE STATE CALLED');
     hardwaremanager.updateState(req, res);
 });
 router.post('/updatebase', upload.array(), function (req, res) {
