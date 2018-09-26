@@ -4,16 +4,19 @@
 
 var fs = require('fs');
 var https = require('https');
+var path = require('path');
 const Config = require('./config.json');
 const express = require('express');
 const app = express();
 const router = require("./router.js");
+const dashboard = require("./dashboard.js");
 const graphrouter = require("./graphrouter.js");
-const port = 6002;
-var helmet = require('helmet')
+const port = 80;
+var helmet = require('helmet');
 
 app.use(helmet());
-app.use('/dashboard', express.static('./public'));
+app.use('/newdashboard', dashboard);
+app.use('/dashboard', express.static(path.join(__dirname + '/public')));
 app.use("/service/", router);
 app.use("/graph/", graphrouter);
 app.get("/", (req, res) => {
