@@ -1,4 +1,4 @@
-var MongoClient = require('mongodb').MongoClient
+let MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 const config = require('../config.json');
 
@@ -6,11 +6,8 @@ const TAG = "Database";
 const Debugger = require('./debug.js');
 const Debug = Debugger(TAG);
 
-// documentation for use of MongoDB database can be found online
-// Connection URL
 const url = `${config.database.url}:${config.database.port}/${config.database.scheme}`;
 
-// Use connect method to connect to the server
 function connect(callback){
     MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
@@ -48,10 +45,8 @@ function find(dbName, query, filter = () => {return true;}){
 function update(dbName, query, newObj, callback){
     connect(db=>{
         let collection = db.collection(dbName);
-        collection.updateOne(query, newObj, (err) => {
-            if(!err){
-                callback("success");
-            }
+        collection.updateOne(query, newObj, err => {
+            if(!err) callback('success');
         });
     });
 }
