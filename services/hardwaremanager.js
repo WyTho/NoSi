@@ -26,7 +26,7 @@ const hardwarenames = [
 module.exports = {
     updateState(req, res) {
         if (!req.body || !req.body.name || !req.body.interaction || !req.body.state) {
-            return res.send(noDataMsg);
+            return res.send("No Data Found!");
         }
         database.getAllHardware().then(hw => {
             const {hardware: hardwareList} = hw;
@@ -72,12 +72,11 @@ module.exports = {
         if (!req.params.name) {
             return res.send("No Data Found");
         }
-        database.find(databasename, {name: req.params.name}).then(result => {
-            if (result.length === 0) {
-                return res.send("No Data Found");
-            }
-            res.send(result);
-        }).catch(err => res.send(err));
+        database.getAllHardware()
+            .then(({hardware: hardwareList}) => {
+                const hardware = hardwareList.find(({name}) => name.toLowerCase() === req.params.name.toLowerCase());
+                res.send(hardware);
+            });
     },
     getBase(req, res) {
         if (!req.params.name) {
@@ -97,6 +96,7 @@ module.exports = {
         database.insert(databasename, req.body.hardware, x => res.send(x));
 
     },
+
     getAllHardware(req, res) {
         database.find(databasename, {}).then(result => {
             res.send(JSON.stringify({area: result}));
