@@ -1,8 +1,5 @@
 const database = require("../util/database.js");
 const uuid = require("uuid/v4");
-const TAG = "Hardware Manager";
-const Debugger = require("../util/debug.js");
-const Debug = Debugger(TAG);
 
 function hardwaremanager() {
     const noDataMsg = "No Data Found";
@@ -50,14 +47,14 @@ function hardwaremanager() {
                     interaction: interaction.name,
                     action: action.description,
                     state: action.code
-                }, () => Debug("inserted"));
+                }, () => console.log("inserted"));
 
                 hardware.state.code = action.code;
                 console.log("going to update");
                 database.update(databasename, {areaname: "keuken"}, hw, x => res.send(x));
 
 
-            }).catch(err => Debug(err));
+            }).catch(err => console.log(err));
         },
         updateBase(req, res) {
             if (!req.body || !req.body.name || !req.body.base || !req.body.type || !req.body.dataset) {
