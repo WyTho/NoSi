@@ -1,17 +1,12 @@
-let MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
+let MongoClient = require('mongodb').MongoClient,
+    assert = require('assert');
 const config = require('../config.json');
-
-const TAG = "Database";
-const Debugger = require('./debug.js');
-const Debug = Debugger(TAG);
-
 const url = `${config.database.url}:${config.database.port}/${config.database.scheme}`;
 
 function connect(callback){
     MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
-        Debug("Connected successfully to server");
+        console.log("Connected successfully to server");
         callback(db);
         db.close();
     });
@@ -34,8 +29,8 @@ function find(dbName, query, filter = () => {return true;}){
                 console.log('docs:', docs);
                 if(err != null) reject(err);
                 let results = docs.filter(filter);
-                Debug("Found the following records");
-                Debug(results);
+                console.log("Found the following records");
+                console.log(results);
                 resolve(results);
             });
         });
@@ -44,27 +39,14 @@ function find(dbName, query, filter = () => {return true;}){
 }
 
 function update(dbName, query, newObj, callback){
-    connect(db=>{
-        let collection = db.collection(dbName);
-        collection.updateOne(query, newObj, (err) => {
-            if(!err){
-                callback("success");
-            }else {
-                callback("error")
-            }
-
-        });
-    });
+    connect(db => db.collection(dbName).updateOne(query, newObj, err => err ? callback("error") : callback("success")));
 }
 
 function getAllHardware(){
     return new Promise((resolve, reject) => {
         connect(db => {
             let collection = db.collection("area");
-            collection.findOne({}, function (err, hardware) {
-                if (err != null) reject(err);
-                resolve(hardware);
-            })
+            collection.findOne({}, (err, hardware) => err != null ? reject(err) : resolve(hardware))
         })
     });
 }
