@@ -88,7 +88,7 @@ module.exports = {
                     return res.send("No Data Found");
                 }
 
-                res.send(result[0].hardware[indexof(req.params.name)].log[0]);
+                res.send(result[0].hardware[hardwarenames.indexOf(req.params.name)].log[0]);
             });
         },
         newHardware(req, res) {
