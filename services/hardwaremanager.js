@@ -1,7 +1,7 @@
 const database = require("../util/database.js");
 const uuid = require("uuid/v4");
 
-const noDataMsg = "No Data Found";
+const noDataMsg = "No data found!";
 const databasename = "area";
 const hardwarenames = [
     "Staande_lamp_1",
@@ -26,12 +26,12 @@ const hardwarenames = [
 module.exports = {
     updateState(req, res) {
         if (!req.body || !req.body.name || !req.body.interaction || !req.body.state) {
-            return res.send("No Data Found!");
+            return res.send(noDataMsg);
         }
         database.getAllHardware().then(hw => {
             const {hardware: hardwareList} = hw;
             const hardware = [...hardwareList].filter(h => h.name === req.body.name)[0];
-            if(!hardware) return res.send("No Data Found");
+            if(!hardware) return res.send(noDataMsg);
             console.log(hardware);
 
             let interaction = hardware.interactions.find(x => x.name === req.body.interaction);
@@ -70,7 +70,7 @@ module.exports = {
 
     getState(req, res) {
         if (!req.params.name) {
-            return res.send("No Data Found");
+            return res.send(noDataMsg);
         }
         database.getAllHardware()
             .then(({hardware: hardwareList}) => {
@@ -80,18 +80,18 @@ module.exports = {
     },
     getBase(req, res) {
         if (!req.params.name) {
-            return res.send("No Data Found");
+            return res.send(noDataMsg);
         }
         database.find(databasename, {hardware: {$elemMatch: {name: req.params.name}}}).then(result => {
             if (result.length === 0) {
-                return res.send("No Data Found");
+                return res.send(noDataMsg);
             }
 
             res.send(result[0].hardware[hardwarenames.indexOf(req.params.name)].log[0]);
         });
     },
     newHardware(req, res) {
-        if (!req.body.hardware) return res.send("No Data");
+        if (!req.body.hardware) return res.send(noDataMsg);
         req.body.object.id = uuid();
         database.insert(databasename, req.body.hardware, x => res.send(x));
 
