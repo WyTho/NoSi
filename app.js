@@ -11,9 +11,14 @@ const app = express();
 const router = require("./router.js");
 const dashboard = require("./dashboard.js");
 const graphrouter = require("./graphrouter.js");
-const port = 80;
+const port = 6002;
 var helmet = require('helmet');
 
+
+app.use((req, res, next)=>{
+    console.log("incoming request", req.originalUrl);
+    next()
+});
 app.use(helmet());
 app.use('/newdashboard', dashboard);
 app.use('/dashboard', express.static(path.join(__dirname + '/public')));

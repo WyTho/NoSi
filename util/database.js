@@ -34,6 +34,7 @@ function find(dbName, query, filter = () => {return true;}){
         connect(db =>{
             let collection = db.collection(dbName);
             collection.find(query).toArray(function(err, docs) {
+                console.log('docs:', docs);
                 if(err != null) reject(err);
                 let results = docs.filter(filter);
                 Debug("Found the following records");
@@ -51,10 +52,26 @@ function update(dbName, query, newObj, callback){
         collection.updateOne(query, newObj, (err) => {
             if(!err){
                 callback("success");
+            }else {
+                callback("error")
             }
         });
     });
 }
+
+function getAllHardware(){
+    return new Promise((resolve, reject) => {
+        connect(db => {
+            let collection = db.collection("area");
+            collection.findOne({}, function (err, hardware) {
+                if (err != null) reject(err);
+                resolve(hardware);
+            })
+        })
+    });
+}
+
 module.exports.insert = insert;
 module.exports.find = find;
 module.exports.update = update;
+module.exports.getAllHardware = getAllHardware;
