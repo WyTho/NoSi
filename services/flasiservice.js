@@ -14,7 +14,7 @@ function flasiService(){
             fetch(queryURL, { method: 'POST', body: body })
                 .then(data => data.json())
                 .then(data => res.send(JSON.stringify(data)))
-                .catch(err => res.sendStatus(500));
+                .catch(() => res.sendStatus(500));
         },
 
         sendStateChange(id, interaction, state){

@@ -72,11 +72,12 @@ module.exports = {
             if (!req.params.name) {
                 return res.send("No Data Found");
             }
-            database.getAllHardware()
-                .then(({hardware: hardwareList}) => {
-                    const hardware = hardwareList.find(({name}) => name.toLowerCase() === req.params.name.toLowerCase());
-                    res.send(hardware);
-                });
+            database.find(databasename, {name: req.params.name}).then(result => {
+                if (result.length === 0) {
+                    return res.send("No Data Found");
+                }
+                res.send(result);
+            }).catch(err => res.send(err));
         },
         getBase(req, res) {
             if (!req.params.name) {
@@ -97,9 +98,13 @@ module.exports = {
 
     },
 
-    getAllHardware(req, res) {
-        database.find(databasename, {})
-            .then(result => res.send(JSON.stringify({area: result})))
-            .catch(err => res.send(err));
-    }
-};
+        getAllHardware(req, res) {
+            database.find(databasename, {}).then(result => {
+                res.send(JSON.stringify({area: result}));
+            }).catch(err => res.send(err));
+        }
+    };
+}
+
+
+module.exports = hardwaremanager();
