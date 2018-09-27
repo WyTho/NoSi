@@ -1,13 +1,10 @@
-//TODO: add description of file
 const database = require("../util/database.js");
 const uuid = require("uuid/v4");
 const TAG = "Hardware Manager";
 const Debugger = require("../util/debug.js");
 const Debug = Debugger(TAG);
-const flasiservice = require("./flasiservice.js");
 
 function hardwaremanager() {
-
     //Checks if apikey is valid
 
     // AANGEPAST: deze string was "area" maar moest "hardware" zijn want zo heet die in mongoDB
@@ -31,13 +28,12 @@ function hardwaremanager() {
         "Inperla[4679360]"];
 
     function indexof(index) {
-        var i = hardwarenames.indexOf(index);
-        return i;
+        return hardwarenames.indexOf(index);
     }
 
     return {
         updateState(req, res) {
-            console.log("update state");
+
             //TODO: Add security checks try and do this with API keys.
             if (!req.body || !req.body.name || !req.body.interaction || !req.body.state) {
                 return res.send("No Data Found!");
@@ -57,6 +53,7 @@ function hardwaremanager() {
                 if (!interaction) return res.send("No Interaction Found");
                 let action = interaction.actions.find(x => x.code === req.body.state);
                 if (!action) return res.send("No action found");
+
                 database.insert("actionlog", {
                     hardwareID: hardware.id,
                     hardwareName: hardware.name,
@@ -65,6 +62,7 @@ function hardwaremanager() {
                     action: action.description,
                     state: action.code
                 }, () => Debug("inserted"));
+
                 hardware.state.code = action.code;
                 //  result.state.find(x => x.name === req.body.interaction).state = action.code;
                 //Update de daadwerkelijke state in de database
@@ -74,6 +72,7 @@ function hardwaremanager() {
                     res.send(x);
                     //  flasiservice.sendStateChange(result.flasi_id,0, action.code);
                 });
+
 
             }).catch(err => Debug(err));
             // database.find("area",undefined).then(result => {
@@ -132,32 +131,27 @@ function hardwaremanager() {
             database.update("area", {id: '4'}, {$set: {querydata: req.body.dataset}});
         },
         testSecurity(req, res) {
-            //TODO: Test security HIER
-
             res.send("Response");
             JSON.stringify``
         },
 
         getState(req, res) {
-            //TODO: Add security checks
-            // AANGEPAST: ietz in deze functie
             if (!req.params.name) {
                 return res.send("No Data Found");
             }
             database.find(databasename, {name: req.params.name}).then(result => {
-                if (result.length == 0) {
+                if (result.length === 0) {
                     return res.send("No Data Found");
                 }
                 res.send(result);
             }).catch(err => res.send(err));
         },
         getBase(req, res) {
-            // AANGEPAST: ietz in deze functie
             if (!req.params.name) {
                 return res.send("No Data Found");
             }
             database.find(databasename, {hardware: {$elemMatch: {name: req.params.name}}}).then(result => {
-                if (result.length == 0) {
+                if (result.length === 0) {
                     return res.send("No Data Found");
                 }
 
@@ -165,7 +159,6 @@ function hardwaremanager() {
             });
         },
         newHardware(req, res) {
-            //TODO: Add security checks
             if (!req.body.hardware) return res.send("No Data");
             req.body.object.id = uuid();
             database.insert(databasename, req.body.hardware, x => res.send(x));
@@ -173,8 +166,6 @@ function hardwaremanager() {
         },
 
         getAllHardware(req, res) {
-            Debug('\nhere2\n')
-            //TODO: Implementeer security checks
             database.find(databasename, {}).then(result => {
                 res.send(JSON.stringify({area: result}));
             }).catch(err => res.send(err));
