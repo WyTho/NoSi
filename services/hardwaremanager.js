@@ -5,8 +5,10 @@ const Debugger = require("../util/debug.js");
 const Debug = Debugger(TAG);
 
 function hardwaremanager() {
+    const noDataMsg = "No Data Found";
     const databasename = "area";
-    const hardwarenames = ["Staande_lamp_1",
+    const hardwarenames = [
+        "Staande_lamp_1",
         "slide-door",
         "VE_Air_Terminal_Wall_Grille_MEPcontent_Trox_SL-DG",
         "VK102",
@@ -22,11 +24,8 @@ function hardwaremanager() {
         "32_binnendeur[7202788]",
         "Wasmachine",
         "Inperla[4679340]",
-        "Inperla[4679360]"];
-
-    function indexof(index) {
-        return hardwarenames.indexOf(index);
-    }
+        "Inperla[4679360]"
+    ];
 
     return {
         updateState(req, res) {
@@ -62,7 +61,7 @@ function hardwaremanager() {
         },
         updateBase(req, res) {
             if (!req.body || !req.body.name || !req.body.base || !req.body.type || !req.body.dataset) {
-                return res.send("No Data Found");
+                return res.send(noDataMsg);
             }
             database.update(databasename, {id: '4'}, {$set: {querybase: req.body.base}});
             database.update(databasename, {id: '4'}, {$set: {querytype: req.body.type}});
@@ -74,35 +73,32 @@ function hardwaremanager() {
         },
 
         getState(req, res) {
-            if (!req.params.name) return res.send("No Data Found");
-            database.find(databasename, {name: req.params.name}).then(result => {
-                if (result.length === 0) return res.send("No Data Found");
-                res.send(result);
-            }).catch(err => res.send(err));
+            if (!req.params.name) return res.send(noDataMsg);
+
+            database.find(databasename, {name: req.params.name})
+                .then(result => result.length === 0 ? res.send(noDataMsg) : res.send(result))
+                .catch(err => res.send(err));
         },
         getBase(req, res) {
-            if (!req.params.name) {
-                return res.send("No Data Found");
-            }
-            database.find(databasename, {hardware: {$elemMatch: {name: req.params.name}}}).then(result => {
-                if (result.length === 0) {
-                    return res.send("No Data Found");
-                }
-
-                res.send(result[0].hardware[indexof(req.params.name)].log[0]);
-            });
+            if (!req.params.name) return res.send(noDataMsg);
+            database.find(databasename, {hardware: {$elemMatch: {name: req.params.name}}})
+                .then(result =>
+                    result.length === 0 ?
+                    res.send(noDataMsg) :
+                    res.send(result[0].hardware[hardwarenames.indexOf(req.params.name)].log[0])
+                );
         },
         newHardware(req, res) {
-            if (!req.body.hardware) return res.send("No Data");
+            if (!req.body.hardware) return res.send(noDataMsg);
             req.body.object.id = uuid();
             database.insert(databasename, req.body.hardware, x => res.send(x));
 
         },
 
         getAllHardware(req, res) {
-            database.find(databasename, {}).then(result => {
-                res.send(JSON.stringify({area: result}));
-            }).catch(err => res.send(err));
+            database.find(databasename, {})
+                .then(result => res.send(JSON.stringify({area: result})))
+                .catch(err => res.send(err));
         }
     };
 }
