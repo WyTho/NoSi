@@ -1,8 +1,8 @@
 {
     "database": {
-        "url": "mongodb://localhost",
-        "port": "27017",
-        "scheme": "NoSi"
+        "url": "mongodb://deploy:123abc@ds113003.mlab.com",
+        "port": "13003",
+        "scheme": "selficientnosi"
     },
     "homelink": {
         "url": "blabla"

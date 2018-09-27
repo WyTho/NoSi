@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const graphService = require("./services/graphservice.js");
+const graphService = require("../services/graphservice.js");
 
 router.use(bodyParser.json()); // for parsing application/json
 router.use(cors());

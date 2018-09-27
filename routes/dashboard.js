@@ -8,6 +8,6 @@ router.use((req, res, next) => {
   console.log('Time: ', Date.now());
   next();
 });
-router.get('/api/graph', (req, res) => res.sendFile(__dirname + '/d1.png'));
+router.get('/api/graph', (req, res) => res.sendFile(__dirname + '/dashboard_image.png'));
 
 module.exports = router;

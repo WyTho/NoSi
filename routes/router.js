@@ -3,9 +3,9 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const upload = multer();
-const hardwaremanager = require('./services/hardwaremanager.js');
+const hardwaremanager = require('../services/hardwaremanager.js');
 const cors = require('cors');
-const flasiservice = require('./services/flasiservice.js');
+const flasiservice = require('../services/flasiservice.js');
 
 router.use(bodyParser.json());
 router.use(cors());

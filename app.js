@@ -2,9 +2,9 @@
 const path = require('path');
 const express = require('express');
 const app = express();
-const router = require("./router.js");
-const dashboard = require("./dashboard.js");
-const graphrouter = require("./graphrouter.js");
+const router = require("./routes/router.js");
+const dashboard = require("./routes/dashboard.js");
+const graphrouter = require("./routes/graphrouter.js");
 const port = 6002;
 
 const helmet = require('helmet');
