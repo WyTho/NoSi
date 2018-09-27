@@ -26,7 +26,7 @@ const hardwarenames = [
 module.exports = {
     updateState(req, res) {
         if (!req.body || !req.body.name || !req.body.interaction || !req.body.state) {
-            return res.send("No Data Found!");
+            return res.send(noDataMsg);
         }
         database.getAllHardware().then(hw => {
             const {hardware: hardwareList} = hw;
@@ -68,43 +68,38 @@ module.exports = {
         JSON.stringify``
     },
 
-        getState(req, res) {
-            if (!req.params.name) {
+    getState(req, res) {
+        if (!req.params.name) {
+            return res.send("No Data Found");
+        }
+        database.find(databasename, {name: req.params.name}).then(result => {
+            if (result.length === 0) {
                 return res.send("No Data Found");
             }
-            database.find(databasename, {name: req.params.name}).then(result => {
-                if (result.length === 0) {
-                    return res.send("No Data Found");
-                }
-                res.send(result);
-            }).catch(err => res.send(err));
-        },
-        getBase(req, res) {
-            if (!req.params.name) {
+            res.send(result);
+        }).catch(err => res.send(err));
+    },
+    getBase(req, res) {
+        if (!req.params.name) {
+            return res.send("No Data Found");
+        }
+        database.find(databasename, {hardware: {$elemMatch: {name: req.params.name}}}).then(result => {
+            if (result.length === 0) {
                 return res.send("No Data Found");
             }
-            database.find(databasename, {hardware: {$elemMatch: {name: req.params.name}}}).then(result => {
-                if (result.length === 0) {
-                    return res.send("No Data Found");
-                }
 
-                res.send(result[0].hardware[hardwarenames.indexOf(req.params.name)].log[0]);
-            });
-        },
-        newHardware(req, res) {
-            if (!req.body.hardware) return res.send("No Data");
-            req.body.object.id = uuid();
-            database.insert(databasename, req.body.hardware, x => res.send(x));
+            res.send(result[0].hardware[hardwarenames.indexOf(req.params.name)].log[0]);
+        });
+    },
+    newHardware(req, res) {
+        if (!req.body.hardware) return res.send("No Data");
+        req.body.object.id = uuid();
+        database.insert(databasename, req.body.hardware, x => res.send(x));
 
     },
-
-        getAllHardware(req, res) {
-            database.find(databasename, {}).then(result => {
-                res.send(JSON.stringify({area: result}));
-            }).catch(err => res.send(err));
-        }
-    };
-}
-
-
-module.exports = hardwaremanager();
+    getAllHardware(req, res) {
+        database.find(databasename, {}).then(result => {
+            res.send(JSON.stringify({area: result}));
+        }).catch(err => res.send(err));
+    }
+};
