@@ -32,7 +32,6 @@ module.exports = {
             const {hardware: hardwareList} = hw;
             const hardware = [...hardwareList].filter(h => h.name === req.body.name)[0];
             if(!hardware) return res.send(noDataMsg);
-            console.log(hardware);
 
             let interaction = hardware.interactions.find(x => x.name === req.body.interaction);
             if (!interaction) return res.send("No Interaction Found");
@@ -49,7 +48,6 @@ module.exports = {
             }, () => console.log("inserted"));
 
             hardware.state.code = action.code;
-            console.log("going to update");
             database.update(databasename, {areaname: "keuken"}, hw, x => res.send(x));
 
 
@@ -65,7 +63,7 @@ module.exports = {
     },
     testSecurity(req, res) {
         res.send("Response");
-        JSON.stringify``
+        // JSON.stringify``
     },
 
     getState(req, res) {

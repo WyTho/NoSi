@@ -11,11 +11,6 @@ router.use(bodyParser.json());
 router.use(cors());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.use(function timeLog (req, res, next) {
-  console.log('Time: ', Date.now());
-  next();
-});
-
 router.get('/', function (req, res) {
   res.send('Oh hallo, wat dou jij nou hier?');
 });

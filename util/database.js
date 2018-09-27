@@ -6,7 +6,7 @@ const url = `${config.database.url}:${config.database.port}/${config.database.sc
 function connect(callback){
     MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
-        console.log("Connected successfully to server");
+        console.log("Connected successfully to mongoDB");
         callback(db);
         db.close();
     });
@@ -26,11 +26,11 @@ function find(dbName, query, filter = () => {return true;}){
         connect(db =>{
             let collection = db.collection(dbName);
             collection.find(query).toArray(function(err, docs) {
-                console.log('docs:', docs);
+                // console.log('docs:', docs);
                 if(err != null) reject(err);
                 let results = docs.filter(filter);
-                console.log("Found the following records");
-                console.log(results);
+                // console.log("Found the following records");
+                // console.log(results);
                 resolve(results);
             });
         });
