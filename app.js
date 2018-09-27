@@ -11,7 +11,7 @@ const helmet = require('helmet');
 
 
 app.use((req, res, next)=>{
-    console.log('Time:', Date.now(), 'Requested URL', req.originalUrl);
+    console.log('Time:', (new Date()).toTimeString(), 'Requested URL', req.originalUrl);
     next()
 });
 app.use(helmet());
