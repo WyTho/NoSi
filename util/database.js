@@ -1,5 +1,5 @@
-let MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
+let MongoClient = require('mongodb').MongoClient,
+    assert = require('assert');
 const config = require('../config.json');
 const url = `${config.database.url}:${config.database.port}/${config.database.scheme}`;
 
@@ -39,27 +39,14 @@ function find(dbName, query, filter = () => {return true;}){
 }
 
 function update(dbName, query, newObj, callback){
-    connect(db=>{
-        let collection = db.collection(dbName);
-        collection.updateOne(query, newObj, (err) => {
-            if(!err){
-                callback("success");
-            }else {
-                callback("error")
-            }
-
-        });
-    });
+    connect(db => db.collection(dbName).updateOne(query, newObj, err => err ? callback("error") : callback("success")));
 }
 
 function getAllHardware(){
     return new Promise((resolve, reject) => {
         connect(db => {
             let collection = db.collection("area");
-            collection.findOne({}, function (err, hardware) {
-                if (err != null) reject(err);
-                resolve(hardware);
-            })
+            collection.findOne({}, (err, hardware) => err != null ? reject(err) : resolve(hardware))
         })
     });
 }
