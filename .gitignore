@@ -63,3 +63,5 @@ typings/
 
 # keys
 APIKEYS.json
+
+.idea

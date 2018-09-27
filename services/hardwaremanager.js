@@ -5,8 +5,11 @@ const Debugger = require("../util/debug.js");
 const Debug = Debugger(TAG);
 
 function hardwaremanager() {
-    const databasename = "hardware";
-    const hardwarenames = ["Staande_lamp_1",
+    //Checks if apikey is valid
+
+    // AANGEPAST: deze string was "area" maar moest "hardware" zijn want zo heet die in mongoDB
+    databasename = "area";
+    var hardwarenames = ["Staande_lamp_1",
         "slide-door",
         "VE_Air_Terminal_Wall_Grille_MEPcontent_Trox_SL-DG",
         "VK102",
@@ -30,43 +33,89 @@ function hardwaremanager() {
 
     return {
         updateState(req, res) {
+
+            //TODO: Add security checks try and do this with API keys.
             if (!req.body || !req.body.name || !req.body.interaction || !req.body.state) {
-                return res.send("No Data Found");
+                return res.send("No Data Found!");
             }
 
-            database.find("hardware", {name: req.body.name}).then(result => {
-                console.log(result);
-                if (result.length === 0) {
-                    return res.send("No Data Found");
-                }
+            // Debug(req.body);
 
-                result = result[0];
+            //Zoek hardware in de database
 
-                let interaction = result.interactions.find(x => x.name === req.body.interaction);
+            database.getAllHardware().then(hw => {
+                const {hardware: hardwareList} = hw;
+                const hardware = [...hardwareList].filter(h => h.name === req.body.name)[0];
+                if(!hardware) return res.send("No Data Found");
+                console.log(hardware);
+
+                let interaction = hardware.interactions.find(x => x.name === req.body.interaction);
                 if (!interaction) return res.send("No Interaction Found");
                 let action = interaction.actions.find(x => x.code === req.body.state);
                 if (!action) return res.send("No action found");
 
-                let date = new Date();
-
                 database.insert("actionlog", {
-                    hardwareID: result.id,
-                    hardwareName: result.name,
-                    date: date.toLocaleString(),
+                    hardwareID: hardware.id,
+                    hardwareName: hardware.name,
+                    date: new Date().toLocaleString(),
                     interaction: interaction.name,
                     action: action.description,
                     state: action.code
                 }, () => Debug("inserted"));
 
-                result.state[0].state = action.code;
+                hardware.state.code = action.code;
+                //  result.state.find(x => x.name === req.body.interaction).state = action.code;
+                //Update de daadwerkelijke state in de database
 
-                database.update("hardware", {name: req.body.name}, result, x =>  res.send(x));
+                console.log("going to update")
+                database.update("area", {areaname: "keuken"}, hw, x => {
+                    res.send(x);
+                    //  flasiservice.sendStateChange(result.flasi_id,0, action.code);
+                });
 
 
             }).catch(err => Debug(err));
+            // database.find("area",undefined).then(result => {
+            //     console.log(result);
+            //     if (result.length === 0) {
+            //         return res.send("No Data Found");
+            //     }
+            //     //Haar result uit een array voor convenience (de array bevat maar 1 item)
+            //     result = result[0];
+            //     console.log("result in hm:", result);
+            //     //TODO: Dit stuk afhandelen in db filter:
+            //     let interaction = result.interactions.find(x => x.name === req.body.interaction);
+            //     if (!interaction) return res.send("No Interaction Found");
+            //     let action = interaction.actions.find(x => x.code === req.body.state);
+            //     if (!action) return res.send("No action found");
+            //
+            //     let date = new Date();
+            //
+            //     //Insert een niew actionlog item in de database
+            //     database.insert("actionlog", {
+            //         hardwareID: result.id,
+            //         hardwareName: result.name,
+            //         date: date.toLocaleString(),
+            //         interaction: interaction.name,
+            //         action: action.description,
+            //         state: action.code
+            //     }, () => Debug("inserted"));
+            //     //console.log(result);
+            //     // result.state[0].state = action.code;
+            //     result.state.code = action.code;
+            //     console.log(result);
+            //     //  result.state.find(x => x.name === req.body.interaction).state = action.code;
+            //     //Update de daadwerkelijke state in de database
+            //     database.update("area", {name: req.body.name}, result, x => {
+            //         res.send(x);
+            //         //  flasiservice.sendStateChange(result.flasi_id,0, action.code);
+            //     });
+            //
+            //     //Send request to FlaSi
+            //
+            // }).catch(err => Debug(err));
         },
         updateBase(req, res) {
-            console.log(req.body);
             if (!req.body || !req.body.name || !req.body.base || !req.body.type || !req.body.dataset) {
                 return res.send("No Data Found");
             }

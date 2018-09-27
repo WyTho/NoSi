@@ -21,6 +21,7 @@ router.get('/', function (req, res) {
 });
 
 router.post('/updatestate', upload.array(), function (req, res) {
+
     hardwaremanager.updateState(req, res);
 });
 router.post('/updatebase', upload.array(), function (req, res) {
