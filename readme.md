@@ -1,3 +1,6 @@
+# This repository is ⚰️ ARCHIVED ⚰️
+This repository is not being used anymore, the replacement is the [Python flask backend/API](https://github.com/WyTho/python_flask)
+
 # NoSI (NodeJS Service)
 
 ## Routes
